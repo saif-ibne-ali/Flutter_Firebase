@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/firebase_options.dart';
-import 'package:flutter_firebase/firebase_student_app.dart';
+import 'package:flutter_firebase/soccer_app.dart';
 
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +17,7 @@ class FireStoreStudentList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: StudentList(),
+      home: SoccerMatchList(),
     );
   }
 }
