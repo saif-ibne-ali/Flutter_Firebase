@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase/soccer_app.dart';
+import 'package:flutter_firebase/Models/soccer_match_model.dart';
 
 class MatchDetailScreen extends StatelessWidget {
   final SoccerMatch soccerMatch;

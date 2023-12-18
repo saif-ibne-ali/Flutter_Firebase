@@ -8,16 +8,5 @@ Future<void> main(List<String> args) async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const FireStoreStudentList());
-}
-
-class FireStoreStudentList extends StatelessWidget {
-  const FireStoreStudentList({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: SoccerMatchList(),
-    );
-  }
+  runApp(const SoccerApp());
 }
