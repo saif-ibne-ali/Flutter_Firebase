@@ -18,7 +18,6 @@ class _StudentListState extends State<StudentList> {
 
   Future<void> getStudentData() async {
     final QuerySnapshot result = await studentCollectionRef.get();
-
     if (mounted) {
       setState(() {});
     }
