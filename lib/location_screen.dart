@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
@@ -13,6 +14,21 @@ class LocationScreen extends StatefulWidget {
 class _LocationScreenState extends State<LocationScreen> {
   Location location = Location();
   LocationData? currentLocation;
+  LocationData? mytLocation;
+  late StreamSubscription locationSubscription;
+
+  @override
+  void initState() {
+    listenToLocation();
+    super.initState();
+  }
+
+  void listenToLocation() {
+    locationSubscription = location.onLocationChanged.listen((locationData) {
+      mytLocation = locationData;
+      if (mounted) setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +41,9 @@ class _LocationScreenState extends State<LocationScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-              'My Location ${currentLocation?.latitude ?? ''} & ${currentLocation?.longitude ?? ''} '),
+              'Static Location ${currentLocation?.latitude ?? ''} & ${currentLocation?.longitude ?? ''}'),
+          Text(
+              'RealTime Location ${mytLocation?.latitude ?? ''} & ${mytLocation?.longitude ?? ''}'),
           ElevatedButton(
             autofocus: true,
             onPressed: () async {
@@ -37,8 +55,25 @@ class _LocationScreenState extends State<LocationScreen> {
             },
             child: const Text('Get location'),
           ),
+          const Text('Has permission?'),
+          ElevatedButton(
+            onPressed: () async {
+              PermissionStatus status = await location.hasPermission();
+              if (status == PermissionStatus.denied ||
+                  status == PermissionStatus.deniedForever) {
+                location.requestPermission();
+              }
+            },
+            child: const Text('Grant Permission'),
+          ),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    locationSubscription.cancel();
+    super.dispose();
   }
 }
