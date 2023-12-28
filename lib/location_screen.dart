@@ -1,6 +1,5 @@
 
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
@@ -13,6 +12,7 @@ class LocationScreen extends StatefulWidget {
 
 class _LocationScreenState extends State<LocationScreen> {
   Location location = Location();
+  LocationData? currentLocation;
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +21,19 @@ class _LocationScreenState extends State<LocationScreen> {
         title: const Text('Location'),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text('My Location'),
+          Text(
+              'My Location ${currentLocation?.latitude ?? ''} & ${currentLocation?.longitude ?? ''} '),
           ElevatedButton(
-            onPressed: () async{
-             final LocationData currentLocation = await location.getLocation();
-             log(currentLocation.altitude.toString());
-             log(currentLocation.longitude.toString());
-             log(currentLocation.latitude.toString());
+            autofocus: true,
+            onPressed: () async {
+              currentLocation = await location.getLocation();
+              log(currentLocation!.altitude.toString());
+              log(currentLocation!.longitude.toString());
+              log(currentLocation!.latitude.toString());
+              if (mounted) setState(() {});
             },
             child: const Text('Get location'),
           ),
