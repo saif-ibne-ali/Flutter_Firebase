@@ -1,6 +1,7 @@
 
 import 'dart:async';
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
@@ -14,7 +15,7 @@ class LocationScreen extends StatefulWidget {
 class _LocationScreenState extends State<LocationScreen> {
   Location location = Location();
   LocationData? currentLocation;
-  LocationData? mytLocation;
+  LocationData? myLocation;
   late StreamSubscription locationSubscription;
 
   @override
@@ -25,7 +26,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
   void listenToLocation() {
     locationSubscription = location.onLocationChanged.listen((locationData) {
-      mytLocation = locationData;
+      myLocation = locationData;
       if (mounted) setState(() {});
     });
   }
@@ -42,8 +43,13 @@ class _LocationScreenState extends State<LocationScreen> {
         children: [
           Text(
               'Static Location ${currentLocation?.latitude ?? ''} & ${currentLocation?.longitude ?? ''}'),
-          Text(
-              'RealTime Location ${mytLocation?.latitude ?? ''} & ${mytLocation?.longitude ?? ''}'),
+          StreamBuilder(
+            stream: location.onLocationChanged,
+            builder: (context, locationData) {
+              return Text(
+                  'RealTime Location ${locationData.data?.latitude ?? ''} & ${locationData.data?.longitude ?? ''}');
+            }
+          ),
           ElevatedButton(
             autofocus: true,
             onPressed: () async {

@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_google_maps/location_screen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
 class MapHomeScreen extends StatefulWidget {
   const MapHomeScreen({super.key});
@@ -12,6 +12,29 @@ class MapHomeScreen extends StatefulWidget {
 }
 
 class _MapHomeScreenState extends State<MapHomeScreen> {
+  late GoogleMapController googleMapController;
+  Location location = Location();
+
+  Future<void> getCurrentLocation() async {
+    final LocationData locationData = await location.getLocation();
+    // googleMapController.moveCamera(
+    //   CameraUpdate.newCameraPosition(
+    //     CameraPosition(
+    //       target: LatLng(locationData.latitude!, locationData.longitude!),
+    //     ),
+    //   ),
+    // );
+
+    googleMapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(locationData.latitude!, locationData.longitude!),
+        ),
+      ),
+    );
+    if(mounted) setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,8 +44,9 @@ class _MapHomeScreenState extends State<MapHomeScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const LocationScreen()));
+          getCurrentLocation();
+          // Navigator.push(context,
+          //     MaterialPageRoute(builder: (context) => const LocationScreen()));
         },
         child: const Icon(Icons.location_on_rounded),
       ),
@@ -42,71 +66,75 @@ class _MapHomeScreenState extends State<MapHomeScreen> {
         onCameraMove: (cameraPosition) {
           log(cameraPosition.toString());
         },
+        onMapCreated: (GoogleMapController controller) {
+          googleMapController = controller;
+          getCurrentLocation();
+        },
         zoomControlsEnabled: true,
         zoomGesturesEnabled: true,
         compassEnabled: true,
         myLocationButtonEnabled: true,
         myLocationEnabled: true,
         markers: {
-            Marker(
-              markerId: const MarkerId('Initial Position'),
-              position: const LatLng(23.835925219207976, 90.54001712570638),
-              icon: BitmapDescriptor.defaultMarkerWithHue(
-                  BitmapDescriptor.hueYellow),
-              infoWindow: const InfoWindow(
-                  title: 'Marker Title', snippet: 'This is a snippet'),
-              draggable: true,
-              onDragEnd: (LatLng position) {
-                log(position.toString());
-              },
-              onDragStart: (LatLng position) {
-                log(position.toString());
-              },
-              onDrag: (LatLng position) {
-                log(position.toString());
-              },
-              onTap: () => log('Tapped in marker'),
-            ),
-            Marker(
-              markerId: const MarkerId('Initial Position B'),
-              position: const LatLng(23.835680110038282, 90.53999472409487),
-              icon: BitmapDescriptor.defaultMarkerWithHue(
-                  BitmapDescriptor.hueYellow),
-              infoWindow: const InfoWindow(
-                  title: 'Marker Title', snippet: 'This is a snippet'),
-              draggable: true,
-              onDragEnd: (LatLng position) {
-                log(position.toString());
-              },
-              onDragStart: (LatLng position) {
-                log(position.toString());
-              },
-              onDrag: (LatLng position) {
-                log(position.toString());
-              },
-              onTap: () => log('Tapped in marker'),
-            ),
-            Marker(
-              markerId: const MarkerId('Initial Position B'),
-              position: const LatLng(23.83589969260255, 90.53977981209755),
-              icon: BitmapDescriptor.defaultMarkerWithHue(
-                  BitmapDescriptor.hueYellow),
-              infoWindow: const InfoWindow(
-                  title: 'Marker Title', snippet: 'This is a snippet'),
-              draggable: true,
-              onDragEnd: (LatLng position) {
-                log(position.toString());
-              },
-              onDragStart: (LatLng position) {
-                log(position.toString());
-              },
-              onDrag: (LatLng position) {
-                log(position.toString());
-              },
-              onTap: () => log('Tapped in marker'),
-            ),
-          },
-          polylines: {
+          Marker(
+            markerId: const MarkerId('Initial Position'),
+            position: const LatLng(23.835925219207976, 90.54001712570638),
+            icon: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueYellow),
+            infoWindow: const InfoWindow(
+                title: 'Marker Title', snippet: 'This is a snippet'),
+            draggable: true,
+            onDragEnd: (LatLng position) {
+              log(position.toString());
+            },
+            onDragStart: (LatLng position) {
+              log(position.toString());
+            },
+            onDrag: (LatLng position) {
+              log(position.toString());
+            },
+            onTap: () => log('Tapped in marker'),
+          ),
+          Marker(
+            markerId: const MarkerId('Initial Position B'),
+            position: const LatLng(23.835680110038282, 90.53999472409487),
+            icon: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueYellow),
+            infoWindow: const InfoWindow(
+                title: 'Marker Title', snippet: 'This is a snippet'),
+            draggable: true,
+            onDragEnd: (LatLng position) {
+              log(position.toString());
+            },
+            onDragStart: (LatLng position) {
+              log(position.toString());
+            },
+            onDrag: (LatLng position) {
+              log(position.toString());
+            },
+            onTap: () => log('Tapped in marker'),
+          ),
+          Marker(
+            markerId: const MarkerId('Initial Position B'),
+            position: const LatLng(23.83589969260255, 90.53977981209755),
+            icon: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueYellow),
+            infoWindow: const InfoWindow(
+                title: 'Marker Title', snippet: 'This is a snippet'),
+            draggable: true,
+            onDragEnd: (LatLng position) {
+              log(position.toString());
+            },
+            onDragStart: (LatLng position) {
+              log(position.toString());
+            },
+            onDrag: (LatLng position) {
+              log(position.toString());
+            },
+            onTap: () => log('Tapped in marker'),
+          ),
+        },
+        polylines: {
           Polyline(
               polylineId: const PolylineId('Draw line'),
               color: Colors.green,
@@ -146,7 +174,7 @@ class _MapHomeScreenState extends State<MapHomeScreen> {
                 LatLng(23.836294694938612, 90.54000310599804),
               ]),
         },
-          polygons: {
+        polygons: {
           Polygon(
               polygonId: const PolygonId('Rectangale'),
               visible: true,
@@ -164,7 +192,7 @@ class _MapHomeScreenState extends State<MapHomeScreen> {
                 LatLng(23.836231519179982, 90.53940363228321),
               ]),
         },
-          circles: {
+        circles: {
           Circle(
               circleId: const CircleId('It is circle'),
               center: const LatLng(23.83656886510737, 90.53937379270792),
